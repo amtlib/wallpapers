@@ -14,14 +14,21 @@ elif len(sys.argv) >= 2:
 
 reddit = praw.Reddit(user_agent=USER_AGENT)
 
-random_submission = reddit.get_subreddit(subreddit).get_random_submission()
 
-while 'http://i.imgur.com/' not in random_submission.url:
+while True:
 	random_submission = reddit.get_subreddit(subreddit).get_random_submission()
+	if 'http://i.imgur.com/' in random_submission.url:
+		image_url = random_submission.url
+		break
+	elif 'http://imgur.com/' in random_submission.url:
+		r = requests.get(random_submission.url)
+		soup = bs4.BeautifulSoup(r.text, 'html.parser')
+		image_url = 'http:' + soup.findAll('img', {'class': 'post-image-placeholder'})[0]['src']
+		break
 
 
 f = open(WALLPAPER_NAME, 'wb')
-r = requests.get(random_submission.url)
+r = requests.get(image_url)
 for chunk in r:
 	f.write(chunk)
 
