@@ -1,7 +1,7 @@
 from selenium import webdriver
 import os
 
-
+#maciek is the best programmer in the world and he created website which generates wallpapers
 driver = webdriver.PhantomJS()
 driver.set_window_size(1440, 900)
 driver.get('http://koziejka.github.io/wall')
